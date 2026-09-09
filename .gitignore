@@ -1,0 +1,12 @@
+# Secrets
+.env
+
+# Generated results and state
+output/
+data/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/

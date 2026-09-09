@@ -1,0 +1,182 @@
+{
+  "resume_file": "resume_paraskevas.html",
+  "search": {
+    "terms": [
+      "PHP Developer",
+      "Laravel Developer",
+      "Vue.js Developer",
+      "Backend Developer",
+      "Full Stack Developer",
+      "Web Developer"
+    ],
+    "countries": [
+      "germany",
+      "austria",
+      "netherlands",
+      "switzerland",
+      "greece"
+    ],
+    "posted_within_days": 14,
+    "results_per_term": 40,
+    "linkedin_results_per_term": 10,
+    "sources": [
+      "jobspy_indeed",
+      "jobspy_linkedin",
+      "jobspy_google",
+      "adzuna",
+      "jooble"
+    ],
+    "remote_policy": "include",
+    "jooble_terms": [
+      "php laravel vue developer",
+      "full stack web developer"
+    ]
+  },
+  "matching": {
+    "min_match_percent": 70,
+    "min_detected_skills": 2,
+    "strong_skill_threshold": 0.5,
+    "languages_ok": [
+      "en",
+      "de",
+      "el"
+    ],
+    "exclude_title_keywords": [
+      "senior",
+      "sr.",
+      "lead",
+      "principal",
+      "staff",
+      "architect",
+      "head of",
+      "director",
+      "chief",
+      "cto",
+      "teamleiter",
+      "leiter",
+      "intern",
+      "internship",
+      "praktikum",
+      "praktikant",
+      "werkstudent",
+      "trainee",
+      "apprentice",
+      "ausbildung",
+      "thesis",
+      "customer support",
+      "customer service",
+      "technical support",
+      "support representative",
+      "sales",
+      "recruiter",
+      "account manager",
+      "business development"
+    ],
+    "skills": [
+      {
+        "name": "laravel",
+        "proficiency": 0.85
+      },
+      {
+        "name": "vue",
+        "proficiency": 0.85
+      },
+      {
+        "name": "javascript",
+        "proficiency": 0.8
+      },
+      {
+        "name": "php",
+        "proficiency": 0.8
+      },
+      {
+        "name": "rest",
+        "proficiency": 0.8
+      },
+      {
+        "name": "mysql",
+        "proficiency": 0.75
+      },
+      {
+        "name": "postgresql",
+        "proficiency": 0.75
+      },
+      {
+        "name": "sql",
+        "proficiency": 0.75
+      },
+      {
+        "name": "angular",
+        "proficiency": 0.6
+      },
+      {
+        "name": "typescript",
+        "proficiency": 0.6
+      },
+      {
+        "name": "codeigniter",
+        "proficiency": 0.5
+      },
+      {
+        "name": "css",
+        "proficiency": 0.5
+      },
+      {
+        "name": "flask",
+        "proficiency": 0.5
+      },
+      {
+        "name": "git",
+        "proficiency": 0.5
+      },
+      {
+        "name": "html",
+        "proficiency": 0.5
+      },
+      {
+        "name": "jquery",
+        "proficiency": 0.5
+      },
+      {
+        "name": "react",
+        "proficiency": 0.5
+      },
+      {
+        "name": "symfony",
+        "proficiency": 0.5
+      },
+      {
+        "name": "testing",
+        "proficiency": 0.5
+      },
+      {
+        "name": "zend",
+        "proficiency": 0.5
+      },
+      {
+        "name": "django",
+        "proficiency": 0.4
+      },
+      {
+        "name": "python",
+        "proficiency": 0.4
+      },
+      {
+        "name": "csharp",
+        "proficiency": 0.3
+      },
+      {
+        "name": "java",
+        "proficiency": 0.3
+      },
+      {
+        "name": "spring",
+        "proficiency": 0.3
+      },
+      {
+        "name": "aws",
+        "proficiency": 0.25
+      }
+    ]
+  }
+}

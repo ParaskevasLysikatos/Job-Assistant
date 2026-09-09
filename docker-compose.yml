@@ -1,0 +1,16 @@
+services:
+  job-finder:
+    build: .
+    image: job-finder:latest
+    container_name: job-finder
+    env_file:
+      - path: .env
+        required: false          # API keys are optional; scrapers need none
+    volumes:
+      - ./preference.json:/app/preference.json    # your settings, edit freely
+      - ./resume_paraskevas.html:/app/resume_paraskevas.html:ro
+      - ./output:/app/output                      # HTML report + CSV land here
+      - ./data:/app/data                          # SQLite store of already-seen jobs
+    # Overridden on the command line, e.g.:
+    #   docker compose run --rm job-finder --all --min-match 60
+    command: []

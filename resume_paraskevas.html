@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paraskevas Lysikatos - Full Stack Developer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.3;
+            color: #333;
+            background: #f8f9fa;
+            padding: 10px;
+        }
+
+        .resume {
+            max-width: 210mm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            color: white;
+            padding: 20px 18px;
+        }
+
+        .main-content {
+            padding: 20px 25px;
+            background: white;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .name {
+            font-size: 23px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .title {
+            font-size: 13px;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 12px;
+        }
+
+        .contact-info {
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .contact-info div {
+            margin-bottom: 5px;
+            opacity: 0.9;
+        }
+
+        .section {
+            margin-bottom: 14px;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 4px;
+        }
+
+        .main-section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 4px;
+        }
+
+        .skill-item {
+            margin-bottom: 8px;
+        }
+
+        .skill-name {
+            font-size: 11px;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+
+        .skill-bar {
+            height: 5px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #60a5fa, #93c5fd);
+            border-radius: 3px;
+        }
+
+        .experience-item {
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 4px;
+        }
+
+        .job-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .company {
+            font-size: 11px;
+            color: #2563eb;
+            font-weight: 500;
+        }
+
+        .duration {
+            font-size: 10px;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+
+        .job-description {
+            font-size: 11px;
+            color: #4b5563;
+            line-height: 1.3;
+        }
+
+        .project-item {
+            margin-bottom: 10px;
+        }
+
+        .project-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 3px;
+        }
+
+        .project-tech {
+            font-size: 10px;
+            color: #2563eb;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+
+        .project-description {
+            font-size: 11px;
+            color: #4b5563;
+            line-height: 1.3;
+        }
+
+        .education-item {
+            margin-bottom: 10px;
+        }
+
+        .degree {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .institution {
+            font-size: 10px;
+            opacity: 0.8;
+            margin-bottom: 2px;
+        }
+
+        .cert-item {
+            font-size: 10px;
+            margin-bottom: 4px;
+            opacity: 0.9;
+        }
+
+        .languages {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .language {
+            background: rgba(255,255,255,0.2);
+            padding: 3px 7px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .summary {
+            font-size: 11.5px;
+            line-height: 1.35;
+            color: #374151;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+    <div class="resume">
+        <div class="sidebar">
+            <div class="header">
+                <h1 class="name">Paraskevas Lysikatos</h1>
+                <div class="title">Mid-Level Full-stack Developer</div>
+                <div class="contact-info">
+                    <div>📧 lysikatosparaskevas@gmail.com</div>
+                    <div>📱 +30 6955516243</div>
+                    <div>📍 Sikies 56625, Thessaloniki</div>
+                    <div>🔗 linkedin.com/in/paraskevas-lysikatos</div>
+                    <div>💻 github.com/ParaskevasLysikatos</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Technical Skills</h3>
+                <div class="skill-item">
+                    <div class="skill-name">Laravel + Vue.js</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 85%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">PHP + JavaScript</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 80%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">MySQL + PostgreSQL</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 75%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">Angular + TypeScript</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 60%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">Python + Django</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 40%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">Java(Spring Boot) + C#(.NET)</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 30%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">AWS + Cloud</div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 25%"></div></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Education</h3>
+                <div class="education-item">
+                    <div class="degree">BSc Computer Science</div>
+                    <div class="institution">University of Sheffield</div>
+                    <div class="institution">2016 - 2020</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Notable Udemy Courses</h3>
+                <div class="cert-item">• AWS Cloud Practitioner (2022)</div>
+                <div class="cert-item">• Angular Testing Masterclass (2022)</div>
+                <div class="cert-item">• NgRx Complete Guide (2022)</div>
+                <div class="cert-item">• Angular Complete Guide (2022)</div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Languages</h3>
+                <div class="languages">
+                    <span class="language">Greek (Native)</span>
+                    <span class="language">English (B2 and University)</span>
+                    <span class="language">German (B2)</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="main-content">
+            <div class="summary">
+                Computer Science graduate with 5+ years of full-stack development experience, currently working as a Back End Developer contracting for Accenture. Specialised in the Laravel/Vue.js ecosystem with hands-on experience in PHP, JavaScript, Python, and AI-assisted development workflows. Proven track record delivering web applications and middleware in agile environments, including testing, code reviews, and Git version control. Highly motivated, results-driven, and always eager to learn.
+            </div>
+
+            <div class="section">
+                <h2 class="main-section-title">Professional Experience</h2>
+
+                <div class="experience-item">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">Back End Developer</div>
+                            <div class="company">XGate Solutions</div>
+                        </div>
+                        <div class="duration">Oct 2025 - Aug 2026</div>
+                    </div>
+                    <div class="job-description">
+                        Developing a Laravel middleware project that bridges an established backend with a new mobile application. Working as an external contractor for Accenture.
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">Full Stack Developer</div>
+                            <div class="company">thecube</div>
+                        </div>
+                        <div class="duration">Sep 2024 - Oct 2025</div>
+                    </div>
+                    <div class="job-description">
+                        Full-stack development of web applications using mainly Laravel and Vue.js. Also worked with Symfony framework, Flask (Python), Laravel-Inertia-Vue, and Nuxt. Developed two machine-learning (Python) text-sentiment applications. Actively used AI coding agents to accelerate daily development tasks.
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">PHP Software Developer</div>
+                            <div class="company">Aylo (formerly MindGeek)</div>
+                        </div>
+                        <div class="duration">Apr 2024 - Jun 2024</div>
+                    </div>
+                    <div class="job-description">
+                        Developed and debugged tickets in large-scale PHP applications using Laravel and Zend frameworks. Worked with microservices architecture across multiple repositories. Collaborated with Cyprus-Nicosia remote team.
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">Associate Full-Stack Developer</div>
+                            <div class="company">Msensis S.A.</div>
+                        </div>
+                        <div class="duration">Jan 2023 - Apr 2024</div>
+                    </div>
+                    <div class="job-description">
+                        Built and maintained insurance company web applications using PHP 7, jQuery, HTML5, CSS3. Implemented complex business logic and database optimization for high-performance applications.
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">Junior Frontend Developer</div>
+                            <div class="company">CCmath BV (Netherlands)</div>
+                        </div>
+                        <div class="duration">Aug 2022 - Nov 2022</div>
+                    </div>
+                    <div class="job-description">
+                        Frontend development for WFM (Work Force Management) software using Angular. Implemented comprehensive Jest unit testing and maintained code quality standards.
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">Junior Full-Stack Developer</div>
+                            <div class="company">E-avenue</div>
+                        </div>
+                        <div class="duration">Nov 2021 - Jul 2022</div>
+                    </div>
+                    <div class="job-description">
+                        Developed corporate websites and e-commerce platforms using Laravel-Angular stack. Maintained web applications and implemented responsive design solutions.
+                    </div>
+                </div>
+
+                <br>
+                <br>
+
+                <div class="experience-item">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">Junior Backend Developer</div>
+                            <div class="company">Proset</div>
+                        </div>
+                        <div class="duration">Jan 2021 - Aug 2021</div>
+                    </div>
+                    <div class="job-description">
+                        Developed new web applications using Django-React stack. Enhanced and maintained existing CodeIgniter PHP applications for municipal management systems. Applied new web technologies and deployed applications for government clients.
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="section">
+                <h2 class="main-section-title">Notable Projects</h2>
+
+                <div class="project-item">
+                    <div class="project-name">Laravel Casino Platform • Employee Management System • Car Rental Platform</div>
+                    <div class="project-tech">Laravel, Vue.js, Spring Boot, Angular, PostgreSQL, MySQL</div>
+                    <div class="project-description">Full-stack applications including casino testing platform, HR management with device tracking, and multi-user rental system with booking capabilities.</div>
+                </div>
+
+                <div class="project-item">
+                    <div class="project-name">PhD Management • Movie Collection • Attendance System</div>
+                    <div class="project-tech">Laravel, Angular, Django, Python, API Integration</div>
+                    <div class="project-description">Administrative systems including student management platform, movie browsing application, and attendance tracking with CodeIgniter to Django migration.</div>
+                </div>
+
+            </div> -->
+
+            <div class="section">
+                <h2 class="main-section-title">Licenses & Other</h2>
+                
+                <div class="project-item">
+                    <div class="project-name">2 Coding Bootcamps Completed • Military Service (10/2019 - 07/2020)</div>
+                    <div class="project-tech">Driving License: B2 • Greek & Australian Citizenship</div>
+                    <div class="project-description">Completed multiple professional training programs including side-Projects (see LinkedIn) in various technology domains.</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Print functionality
+        window.addEventListener('load', function() {
+            // Auto-fit content if needed
+            const resume = document.querySelector('.resume');
+            if (resume.scrollHeight > resume.clientHeight) {
+                document.body.style.fontSize = '0.95em';
+            }
+        });
+    </script>
+</body>
+</html>

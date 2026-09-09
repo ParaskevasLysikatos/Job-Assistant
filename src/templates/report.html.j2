@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Matches — {{ generated }}</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --text: #1f2430; --muted: #6b7280;
+    --accent: #2563eb; --border: #e5e7eb; --new: #059669;
+    --chip-ok-bg: #dcfce7; --chip-ok-tx: #166534;
+    --chip-mid-bg: #fef3c7; --chip-mid-tx: #92400e;
+    --chip-no-bg: #fee2e2; --chip-no-tx: #991b1b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111420; --card: #1a1f2e; --text: #e6e9f0; --muted: #97a0b3;
+      --accent: #7aa2ff; --border: #2a3145; --new: #34d399;
+      --chip-ok-bg: #143726; --chip-ok-tx: #86efac;
+      --chip-mid-bg: #3d2f11; --chip-mid-tx: #fcd34d;
+      --chip-no-bg: #3b1a1e; --chip-no-tx: #fca5a5;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px; background: var(--bg); color: var(--text);
+         font: 14px/1.5 "Segoe UI", system-ui, -apple-system, sans-serif; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin-bottom: 18px; }
+  .stats { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+          padding: 10px 16px; }
+  .stat b { font-size: 20px; display: block; }
+  .stat span { color: var(--muted); font-size: 12px; }
+  input#q { width: 100%; max-width: 420px; padding: 9px 12px; margin-bottom: 16px;
+            border: 1px solid var(--border); border-radius: 8px; background: var(--card);
+            color: var(--text); font-size: 14px; }
+  details { background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+            margin-bottom: 16px; overflow: hidden; }
+  summary { cursor: pointer; padding: 12px 16px; font-weight: 600; user-select: none; }
+  .tablewrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; min-width: 900px; }
+  th, td { text-align: left; padding: 9px 12px; border-top: 1px solid var(--border);
+           vertical-align: top; }
+  th { cursor: pointer; font-size: 12px; text-transform: uppercase; letter-spacing: .04em;
+       color: var(--muted); white-space: nowrap; }
+  th:hover { color: var(--accent); }
+  .pct { font-weight: 700; font-size: 15px; white-space: nowrap; }
+  .ev { font-weight: 400; font-size: 10.5px; color: var(--muted); }
+  .title { font-weight: 600; }
+  .company { color: var(--muted); font-size: 12.5px; }
+  .badge { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 1px 7px;
+           border-radius: 9px; margin-left: 6px; vertical-align: middle; }
+  .badge.new { background: var(--new); color: #fff; }
+  .badge.remote { background: var(--accent); color: #fff; }
+  .chip { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 9px;
+          margin: 1px 2px 1px 0; }
+  .chip.ok  { background: var(--chip-ok-bg);  color: var(--chip-ok-tx); }
+  .chip.mid { background: var(--chip-mid-bg); color: var(--chip-mid-tx); }
+  .chip.no  { background: var(--chip-no-bg);  color: var(--chip-no-tx); }
+  .legend { color: var(--muted); font-size: 12px; margin: -6px 0 16px; }
+  a.apply { display: inline-block; background: var(--accent); color: #fff; text-decoration: none;
+            padding: 6px 13px; border-radius: 8px; font-weight: 600; font-size: 13px;
+            white-space: nowrap; }
+  .muted { color: var(--muted); }
+  td.nowrap { white-space: nowrap; }
+</style>
+</head>
+<body>
+<h1>Job Finder — matches for Paraskevas</h1>
+<div class="sub">Generated {{ generated }} · countries: {{ countries }} · posted within {{ days }} days ·
+threshold {{ threshold }}% {% if not show_seen %}· showing NEW jobs only (run with --all for everything){% endif %}</div>
+
+<div class="stats">
+  <div class="stat"><b>{{ sections.matches|length }}</b><span>matches ≥ {{ threshold }}%</span></div>
+  <div class="stat"><b>{{ sections.near|length }}</b><span>near misses</span></div>
+  <div class="stat"><b>{{ sections.unscoreable|length }}</b><span>low confidence</span></div>
+  <div class="stat"><b>{{ counts.crawled }}</b><span>jobs crawled</span></div>
+  <div class="stat"><b>{{ counts.unique }}</b><span>unique after dedup</span></div>
+</div>
+
+<input id="q" type="search" placeholder="Filter by title, company, city, skill…">
+<div class="legend">Skill chips: <span class="chip ok">know it well</span>
+<span class="chip mid">know it a little (half credit)</span>
+<span class="chip no">don't have it</span> · click any column header to sort</div>
+
+{% macro job_table(rows, section_id) %}
+<div class="tablewrap">
+<table class="jobs" id="{{ section_id }}">
+  <thead><tr>
+    <th data-num>Match</th><th>Position</th><th>Location</th><th>Country</th>
+    <th>Posted</th><th>Source</th><th>Skills</th><th></th>
+  </tr></thead>
+  <tbody>
+  {% for r in rows %}
+    <tr>
+      <td class="pct" data-sort="{{ r.match if r.match is not none else -1 }}">
+        {{ r.match if r.match is not none else "?" }}{% if r.match is not none %}%{% endif %}
+        <div class="ev">{{ r.evidence }} skill{{ "" if r.evidence == 1 else "s" }} in ad</div></td>
+      <td><span class="title">{{ r.title }}</span>
+          {%- if r.is_new %}<span class="badge new">NEW</span>{% endif %}
+          {%- if r.remote %}<span class="badge remote">REMOTE</span>{% endif %}
+          <div class="company">{{ r.company or "—" }}</div></td>
+      <td>{{ r.location }}</td>
+      <td class="nowrap">{{ r.country }}</td>
+      <td class="nowrap" data-sort="{{ r.date or '' }}">{{ r.date or "?" }}</td>
+      <td class="muted">{{ r.sources }}</td>
+      <td style="max-width:340px">
+        {%- for s, p in r.matched %}<span class="chip ok">{{ s }}</span>{% endfor %}
+        {%- for s, p in r.partial %}<span class="chip mid">{{ s }}</span>{% endfor %}
+        {%- for s in r.missing %}<span class="chip no">{{ s }}</span>{% endfor %}</td>
+      <td><a class="apply" href="{{ r.url }}" target="_blank" rel="noopener">Apply ↗</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endmacro %}
+
+<details open>
+  <summary>✅ Matches ≥ {{ threshold }}% ({{ sections.matches|length }})</summary>
+  {{ job_table(sections.matches, "t-matches") }}
+</details>
+
+<details>
+  <summary>🟡 Near misses {{ near_floor }}–{{ threshold }}% ({{ sections.near|length }}) — worth a look, or tune skills in preference.json</summary>
+  {{ job_table(sections.near, "t-near") }}
+</details>
+
+<details>
+  <summary>❔ Low confidence ({{ sections.unscoreable|length }}) — too few recognizable skills in the ad text to score</summary>
+  {{ job_table(sections.unscoreable, "t-unscoreable") }}
+</details>
+
+<script>
+  // Column sorting: click a header to sort, click again to reverse.
+  document.querySelectorAll("table.jobs").forEach(table => {
+    table.querySelectorAll("th").forEach((th, idx) => {
+      th.addEventListener("click", () => {
+        const numeric = th.hasAttribute("data-num");
+        const tbody = table.tBodies[0];
+        const dir = th.dataset.dir === "asc" ? -1 : 1;
+        th.dataset.dir = dir === 1 ? "asc" : "desc";
+        Array.from(tbody.rows)
+          .sort((a, b) => {
+            const av = a.cells[idx].dataset.sort ?? a.cells[idx].textContent.trim();
+            const bv = b.cells[idx].dataset.sort ?? b.cells[idx].textContent.trim();
+            return numeric ? (parseFloat(av) - parseFloat(bv)) * dir
+                           : av.localeCompare(bv) * dir;
+          })
+          .forEach(row => tbody.appendChild(row));
+      });
+    });
+  });
+  // Live text filter across all tables.
+  document.getElementById("q").addEventListener("input", e => {
+    const needle = e.target.value.toLowerCase();
+    document.querySelectorAll("table.jobs tbody tr").forEach(row => {
+      row.style.display = row.textContent.toLowerCase().includes(needle) ? "" : "none";
+    });
+  });
+</script>
+</body>
+</html>
