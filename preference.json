@@ -16,7 +16,7 @@
       "switzerland",
       "greece"
     ],
-    "posted_within_days": 14,
+    "posted_within_days": 10,
     "results_per_term": 40,
     "linkedin_results_per_term": 10,
     "sources": [
@@ -33,7 +33,7 @@
     ]
   },
   "matching": {
-    "min_match_percent": 70,
+    "min_match_percent": 90,
     "min_detected_skills": 2,
     "strong_skill_threshold": 0.5,
     "languages_ok": [
