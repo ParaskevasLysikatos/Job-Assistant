@@ -52,6 +52,7 @@
            border-radius: 9px; margin-left: 6px; vertical-align: middle; }
   .badge.new { background: var(--new); color: #fff; }
   .badge.remote { background: var(--accent); color: #fff; }
+  .badge.en { background: #7c3aed; color: #fff; }
   .chip { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 9px;
           margin: 1px 2px 1px 0; }
   .chip.ok  { background: var(--chip-ok-bg);  color: var(--chip-ok-tx); }
@@ -99,6 +100,7 @@ threshold {{ threshold }}% {% if not show_seen %}· showing NEW jobs only (run w
       <td><span class="title">{{ r.title }}</span>
           {%- if r.is_new %}<span class="badge new">NEW</span>{% endif %}
           {%- if r.remote %}<span class="badge remote">REMOTE</span>{% endif %}
+          {%- if r.english_ok %}<span class="badge en">EN OK</span>{% endif %}
           <div class="company">{{ r.company or "—" }}</div></td>
       <td>{{ r.location }}</td>
       <td class="nowrap">{{ r.country }}</td>

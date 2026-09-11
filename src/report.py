@@ -35,6 +35,7 @@ def build_row(job: JobPosting, score: ScoreResult, is_new: bool) -> dict:
         "strength": score.strength,
         "is_new": is_new,
         "remote": job.is_remote,
+        "english_ok": job.english_friendly,
     }
 
 
@@ -74,14 +75,16 @@ def write_reports(sections: dict[str, list[dict]], counts: dict, cfg: Config,
     with csv_path.open("w", newline="", encoding="utf-8-sig") as f:
         writer = csv.writer(f)
         writer.writerow(["status", "match_percent", "skills_in_ad", "title", "company",
-                         "location", "country", "remote", "new", "date_posted", "sources",
+                         "location", "country", "remote", "english_ok", "new",
+                         "date_posted", "sources",
                          "matched_skills", "partial_skills", "missing_skills", "url"])
         for status, rows in sections.items():
             for r in rows:
                 writer.writerow([
                     status, r["match"] if r["match"] is not None else "", r["evidence"],
                     r["title"], r["company"], r["location"], r["country"],
-                    "yes" if r["remote"] else "", "yes" if r["is_new"] else "",
+                    "yes" if r["remote"] else "", "yes" if r["english_ok"] else "",
+                    "yes" if r["is_new"] else "",
                     r["date"], r["sources"],
                     " ".join(s for s, _ in r["matched"]),
                     " ".join(s for s, _ in r["partial"]),
@@ -110,7 +113,9 @@ def print_summary(sections: dict[str, list[dict]], counts: dict, excluded: dict,
     if top:
         p(f"TOP {len(top)} MATCHES:")
         for r in top:
-            flags = "".join([" [NEW]" if r["is_new"] else "", " [REMOTE]" if r["remote"] else ""])
+            flags = "".join([" [NEW]" if r["is_new"] else "",
+                             " [REMOTE]" if r["remote"] else "",
+                             " [EN OK]" if r["english_ok"] else ""])
             p(f"  {r['match']:5.1f}% ({r['evidence']} skills)  {r['title']} - "
               f"{r['company'] or '?'} ({r['country']}){flags}")
             p(f"          {r['url']}")

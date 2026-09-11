@@ -98,12 +98,17 @@ def default_preferences(skills: dict[str, float], resume_file: str) -> dict:
         "matching": {
             "min_match_percent": 70,
             "min_detected_skills": 2,
+            "strong_skill_threshold": 0.5,
+            "german_requirement": "low",
             "languages_ok": ["en", "de", "el"],
             "exclude_title_keywords": [
                 "senior", "sr.", "lead", "principal", "staff", "architect",
                 "head of", "director", "chief", "cto", "teamleiter", "leiter",
                 "intern", "internship", "praktikum", "praktikant", "werkstudent",
                 "trainee", "apprentice", "ausbildung", "thesis",
+                # Career-changer / retraining offers, not mid-level dev roles.
+                "quereinsteiger", "quereinstieg", "berufseinsteiger",
+                "starte deine karriere",
                 # Non-engineering roles that keyword matching would otherwise
                 # score highly because the ad still lists a tech stack.
                 "customer support", "customer service", "technical support",

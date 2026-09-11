@@ -28,6 +28,8 @@ class JobPosting:
     date_posted: date | None = None
     description: str | None = None
     is_remote: bool = False
+    english_friendly: bool = False   # ad says English is enough
+    demands_german: bool = False     # ad asks for German above ~B2
     url_priority: int = 5   # lower = better URL to keep after dedup (direct link beats aggregator)
 
     # Filled in by the pipeline:

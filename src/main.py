@@ -94,6 +94,7 @@ def run(args: argparse.Namespace) -> int:
         posted_within_days=cfg.posted_within_days,
         remote_policy=cfg.remote_policy,
         strong_skill_threshold=cfg.strong_skill_threshold,
+        german_requirement=cfg.german_requirement,
     )
     excluded: Counter = Counter()
     kept: list[tuple[JobPosting, ScoreResult]] = []
@@ -199,6 +200,14 @@ def run_self_test() -> int:
     results.append((f"'Senior' title filtered (reason={out.reason})",
                     not out.kept and out.reason == "senior_title"))
 
+    quer = Scorer(skills=profile, min_detected_skills=2,
+                  exclude_title_keywords=["quereinsteiger"], languages_ok=["en", "de", "el"],
+                  posted_within_days=14)
+    career_changer = job("Frontend Development mit KI - auch für Quereinsteiger (m/w/d)",
+                         "PHP und Laravel.")
+    results.append(("Career-changer ('Quereinsteiger') title filtered",
+                    not quer.filter(career_changer).kept))
+
     german = job("PHP Entwickler (m/w/d)",
                  "Wir suchen einen PHP Entwickler mit Laravel und Vue.js Erfahrung "
                  "fuer unser Team in Berlin. Du arbeitest mit MySQL und Git in einem "
@@ -224,6 +233,44 @@ def run_self_test() -> int:
                  "Work with PHP and Laravel, fully remote within the EU. MySQL a plus.")
     scorer.filter(remote)
     results.append(("Remote heuristic sets is_remote flag", remote.is_remote))
+
+    # German requirement: "low" keeps ads that need workable German, drops the
+    # ones demanding fluency, and respects an explicit English-first statement.
+    de_scorer = Scorer(
+        skills=profile, min_detected_skills=2, languages_ok=["en", "de", "el"],
+        posted_within_days=14, german_requirement="low", strong_skill_threshold=0.5,
+    )
+    fluent = job("PHP Developer", "PHP und Laravel. Wir erwarten verhandlungssicheres "
+                                  "Deutsch und Erfahrung mit MySQL.")
+    out = de_scorer.filter(fluent)
+    results.append((f"Ad demanding fluent German excluded (reason={out.reason})",
+                    not out.kept and out.reason == "german_required"))
+
+    ok_german = job("PHP Developer", "PHP and Laravel with MySQL. Gute Deutschkenntnisse "
+                                     "sind von Vorteil, English is our working language.")
+    out = de_scorer.filter(ok_german)
+    results.append((f"B2-level German ad kept, flagged EN-friendly "
+                    f"(english_friendly={ok_german.english_friendly})",
+                    out.kept and ok_german.english_friendly))
+
+    # An "English is our working language" line must win over a boilerplate
+    # fluent-German line elsewhere in the same ad.
+    mixed_lang = job("Backend Developer",
+                     "PHP, Laravel and MySQL. Fluent German is a plus, but English is "
+                     "our working language and no German is required to join.")
+    out = de_scorer.filter(mixed_lang)
+    results.append((f"English-first ad survives its fluent-German line", out.kept))
+
+    en_only = Scorer(skills=profile, min_detected_skills=2, languages_ok=["en", "de", "el"],
+                     posted_within_days=14, german_requirement="none",
+                     strong_skill_threshold=0.5)
+    german_ad = job("PHP Entwickler", "Wir suchen einen Entwickler mit PHP und Laravel "
+                                      "Erfahrung fuer unser Team in Berlin. Du arbeitest "
+                                      "mit MySQL in einem agilen Umfeld und entwickelst "
+                                      "moderne Webanwendungen fuer unsere Kunden.")
+    out = en_only.filter(german_ad)
+    results.append((f"german_requirement=none drops a German-language ad "
+                    f"(reason={out.reason})", not out.kept))
 
     # Dedup keys: gender markers must be ignored, tech slashes must survive,
     # and company-less postings must stay distinct.

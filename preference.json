@@ -16,7 +16,7 @@
       "switzerland",
       "greece"
     ],
-    "posted_within_days": 10,
+    "posted_within_days": 7,
     "results_per_term": 40,
     "linkedin_results_per_term": 10,
     "sources": [
@@ -36,6 +36,7 @@
     "min_match_percent": 90,
     "min_detected_skills": 2,
     "strong_skill_threshold": 0.5,
+    "german_requirement": "low",
     "languages_ok": [
       "en",
       "de",
@@ -63,6 +64,10 @@
       "apprentice",
       "ausbildung",
       "thesis",
+      "quereinsteiger",
+      "quereinstieg",
+      "berufseinsteiger",
+      "starte deine karriere",
       "customer support",
       "customer service",
       "technical support",

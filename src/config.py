@@ -39,6 +39,7 @@ class Config:
     min_match_percent: float
     min_detected_skills: int
     strong_skill_threshold: float
+    german_requirement: str
     languages_ok: list[str]
     exclude_title_keywords: list[str]
     skills: dict[str, float]
@@ -89,6 +90,10 @@ def load_config(path: Path = PREFERENCE_FILE) -> Config:
     if remote_policy not in ("include", "only", "exclude"):
         _fail("search.remote_policy must be one of: include, only, exclude")
 
+    german_requirement = matching.get("german_requirement", "any")
+    if german_requirement not in ("any", "low", "none"):
+        _fail("matching.german_requirement must be one of: any, low, none")
+
     skills_raw = matching.get("skills", [])
     skills: dict[str, float] = {}
     for item in skills_raw:
@@ -118,6 +123,7 @@ def load_config(path: Path = PREFERENCE_FILE) -> Config:
         min_match_percent=float(matching.get("min_match_percent", 70)),
         min_detected_skills=int(matching.get("min_detected_skills", 2)),
         strong_skill_threshold=float(matching.get("strong_skill_threshold", 0.5)),
+        german_requirement=german_requirement,
         languages_ok=matching.get("languages_ok", ["en", "de", "el"]),
         exclude_title_keywords=matching.get("exclude_title_keywords", []),
         skills=skills,

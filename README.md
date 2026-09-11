@@ -152,9 +152,29 @@ genuinely new opportunities. Use `--all` to see everything again.
 | `min_match_percent` | `70` | **Your 70% threshold.** Lower it to ~60 if results are thin. |
 | `min_detected_skills` | `2` | Below this many recognized skills, an ad goes to *Low confidence*. |
 | `strong_skill_threshold` | `0.5` | Proficiency at or above this counts as full credit; below it, half. |
-| `languages_ok` | `en, de, el` | ISO codes. You read English, German (B2) and Greek. Add `nl` only if you learn Dutch. |
+| `languages_ok` | `en, de, el` | Language the **ad is written in** (ISO codes). Add `nl` only if you learn Dutch. |
+| `german_requirement` | `low` | How much German the **job** may demand — see below. |
 | `exclude_title_keywords` | senior/lead/intern/… | Titles containing any of these are skipped. Includes German terms (`Werkstudent`, `Ausbildung`). |
 | `skills` | seeded from your resume | `name` must be a canonical skill from `src/matching/taxonomy.py`; `proficiency` is 0–1. |
+
+#### Working in English: `german_requirement`
+
+`languages_ok` is about the language an ad is *written in*; `german_requirement` is about how
+much German the *job* actually demands. They are independent — plenty of German-language ads
+are for teams that work in English, and plenty of English ads still want fluent German.
+
+| Value | Effect |
+|---|---|
+| `any` | No language-requirement filtering. |
+| `low` *(current)* | Drops ads demanding German **above ~B2** — "fließend Deutsch", "verhandlungssicher", "sehr gute Deutschkenntnisse", "Deutsch C1", "fluent/native German". Ordinary "gute Deutschkenntnisse" (≈B2) is **kept**, since that is workable for you. |
+| `none` | Strictly English-workable: the above, plus any ad not in English plus not stating English suffices. |
+
+Jobs that say outright that English is enough — "English is our working language", "no German
+required" — get an **EN OK** badge in the report. That statement also overrides a boilerplate
+fluent-German line elsewhere in the same ad, so those jobs are never wrongly dropped.
+
+The phrase lists live in `src/matching/scorer.py` (`GERMAN_FLUENCY`, `ENGLISH_FRIENDLY`) if you
+want to tune the wording.
 
 **Tuning your skills is the highest-leverage edit.** If jobs you like keep landing in *Near
 misses*, look at the red chips: those are the skills costing you points. Add ones you

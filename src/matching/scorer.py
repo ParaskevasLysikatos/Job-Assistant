@@ -31,6 +31,45 @@ REMOTE_HINTS = re.compile(
 # Below this many characters language detection is unreliable; skip the filter.
 MIN_TEXT_FOR_LANG = 80
 
+# Ads demanding German ABOVE a comfortable B2. Plain "gute Deutschkenntnisse"
+# is deliberately absent - that is roughly B2 and workable.
+GERMAN_FLUENCY = re.compile(
+    r"(fließend(e|es)?\s+deutsch|fliessend(e|es)?\s+deutsch|"
+    r"fließende\s+deutschkenntnisse|verhandlungssicher\w*\s+deutsch|"
+    r"deutsch\w*\s+verhandlungssicher|sehr\s+gute\s+deutschkenntnisse|"
+    r"ausgezeichnete\s+deutschkenntnisse|exzellente\s+deutschkenntnisse|"
+    r"deutsch\s+als\s+muttersprache|muttersprach\w*\s+deutsch|"
+    r"deutsch\s+auf\s+muttersprachlichem\s+niveau|"
+    r"deutsch\w*\s*\(?\s*c[12]\s*\)?|c[12][\s-]*niveau\s+deutsch|"
+    r"fluent\s+(in\s+)?german|native\s+german|german\s+native|"
+    r"excellent\s+german|very\s+good\s+german|business[- ]fluent\s+german|"
+    r"proficient\s+in\s+german|german\s+\(?c[12]\)?)",
+    re.IGNORECASE,
+)
+
+# Ads that say out loud that English is enough.
+ENGLISH_FRIENDLY = re.compile(
+    r"(english\s+is\s+(our|the)\s+(working|company|official)\s+language|"
+    r"(working|company|official)\s+language\s+is\s+english|"
+    r"we\s+work\s+in\s+english|english[- ]speaking\s+(team|environment)|"
+    r"no\s+german\s+(is\s+)?(required|needed|necessary)|"
+    r"german\s+(is\s+)?not\s+(required|needed|necessary)|"
+    r"without\s+german|kein\s+deutsch\s+(erforderlich|notwendig)|"
+    r"deutsch\s+nicht\s+erforderlich|englisch\s+als\s+arbeitssprache|"
+    r"arbeitssprache\s+(ist\s+)?englisch)",
+    re.IGNORECASE,
+)
+
+
+def mark_language_fit(job: JobPosting) -> None:
+    """Flag whether an ad demands more German than B2, and whether it states
+    outright that English suffices."""
+    text = f"{job.title or ''} {job.description or ''}"
+    job.english_friendly = bool(ENGLISH_FRIENDLY.search(text))
+    # An explicit "English is our working language" outranks a boilerplate
+    # German-skills line further down the same ad.
+    job.demands_german = bool(GERMAN_FLUENCY.search(text)) and not job.english_friendly
+
 
 def mark_remote(job: JobPosting) -> bool:
     """Set job.is_remote from the ad text if the source didn't flag it.
@@ -53,7 +92,8 @@ class ScoreResult:
 @dataclass
 class FilterOutcome:
     kept: bool
-    reason: str = ""                 # "senior_title" | "language" | "too_old" | "remote_policy"
+    reason: str = ""                 # senior_title | language | too_old | remote_policy
+                                     # | german_required | not_english
     language: str = ""
 
 
@@ -68,7 +108,9 @@ class Scorer:
         remote_policy: str = "include",
         strong_skill_threshold: float = 0.5,
         partial_credit: float = 0.5,
+        german_requirement: str = "any",
     ):
+        self.german_requirement = german_requirement
         self.skills = {k.lower(): float(v) for k, v in skills.items()}
         self.min_detected = min_detected_skills
         self.strong_threshold = strong_skill_threshold
@@ -114,6 +156,15 @@ class Scorer:
                 language = ""
             if language and language not in self.languages_ok:
                 return FilterOutcome(False, "language", language)
+
+        # How much German the job itself demands, independent of the ad's language.
+        mark_language_fit(job)
+        if self.german_requirement in ("low", "none") and job.demands_german:
+            return FilterOutcome(False, "german_required", language)
+        if self.german_requirement == "none":
+            # Strictly English-workable: an English ad, or one that says so.
+            if not job.english_friendly and language and language != "en":
+                return FilterOutcome(False, "not_english", language)
 
         return FilterOutcome(True, "", language)
 
