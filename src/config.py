@@ -19,6 +19,7 @@ COUNTRIES: dict[str, dict] = {
     "netherlands": {"display": "Netherlands", "adzuna": "nl", "jooble": "nl", "indeed": "netherlands"},
     "switzerland": {"display": "Switzerland", "adzuna": "ch", "jooble": "ch", "indeed": "switzerland"},
     "greece":      {"display": "Greece",      "adzuna": None, "jooble": "gr", "indeed": "greece"},
+    "malta":       {"display": "Malta",       "adzuna": None, "jooble": "mt", "indeed": "malta"},
 }
 
 ALL_SOURCES = ["jobspy_indeed", "jobspy_linkedin", "jobspy_google", "adzuna", "jooble"]

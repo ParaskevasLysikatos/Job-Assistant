@@ -103,6 +103,9 @@ class JobSpySource(Source):
         if sites == ["linkedin"]:
             self._linkedin_failures = 0
         if df is None or df.empty:
+            # A legitimate zero-result search (small market, narrow term) looks
+            # identical to a silently broken scrape unless this prints too.
+            print(f"[jobspy] {display} '{term}' {label}: 0 jobs", flush=True)
             return []
 
         postings = []

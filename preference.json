@@ -14,9 +14,10 @@
       "austria",
       "netherlands",
       "switzerland",
-      "greece"
+      "greece",
+      "malta"
     ],
-    "posted_within_days": 7,
+    "posted_within_days": 5,
     "results_per_term": 40,
     "linkedin_results_per_term": 10,
     "sources": [

@@ -1,7 +1,7 @@
 # Job Finder Assistant
 
 A personal, Dockerized job crawler for **Paraskevas Lysikatos**. It crawls job boards
-across **Germany, Austria, Netherlands, Switzerland and Greece**, scores every posting
+across **Germany, Austria, Netherlands, Switzerland, Greece and Malta**, scores every posting
 against your real skill profile, and hands you a ranked HTML report of **apply URLs**
 for the jobs that actually fit.
 
@@ -26,7 +26,7 @@ docker compose run --rm job-finder
 When it finishes, open **`output/report_latest.html`** in your browser. Every row has an
 **Apply ↗** button linking to the original posting.
 
-> First run takes roughly **10–25 minutes** — it is crawling 5 countries × 6 search terms
+> First run takes roughly **10–25 minutes** — it is crawling 6 countries × 6 search terms
 > across several boards, with polite delays so the boards don't rate-limit you.
 
 ---
@@ -35,7 +35,7 @@ When it finishes, open **`output/report_latest.html`** in your browser. Every ro
 
 ```
 preference.json ─┐
-resume html ─────┴─► crawl 5 sources ─► dedupe ─► filter ─► score vs your skills ─► report
+resume html ─────┴─► crawl 5 sources across 6 countries ─► dedupe ─► filter ─► score vs your skills ─► report
                        │                  │         │              │
                    Indeed/LinkedIn/    same job   too old,      skill coverage %
                    Google/Adzuna/      from 2     senior title,
@@ -47,11 +47,11 @@ resume html ─────┴─► crawl 5 sources ─► dedupe ─► filter
 
 | Source | Countries | Key needed | Notes |
 |---|---|---|---|
-| Indeed | all 5 | no | biggest volume |
-| LinkedIn Jobs | all 5 | no | rate-limits easily → smaller batches, auto-skipped after 2 failures |
-| Google Jobs | all 5 | no | aggregates many small boards |
-| Adzuna | DE, AT, NL, CH | yes (free) | no Greek market |
-| Jooble | all 5 | yes (free) | 500 requests **lifetime** per key → used sparingly |
+| Indeed | all 6 | no | biggest volume |
+| LinkedIn Jobs | all 6 | no | rate-limits easily → smaller batches, auto-skipped after 2 failures |
+| Google Jobs | all 6 | no | aggregates many small boards |
+| Adzuna | DE, AT, NL, CH | yes (free) | no Greek or Maltese market |
+| Jooble | all 6 | yes (free) | 500 requests **lifetime** per key → used sparingly |
 
 Indeed / LinkedIn / Google are scraped with [JobSpy](https://github.com/speedyapply/JobSpy).
 Every source is **fail-soft**: if one breaks or is rate-limited, it logs a warning and the
@@ -137,11 +137,11 @@ genuinely new opportunities. Use `--all` to see everything again.
 | Field | Default | What it does |
 |---|---|---|
 | `terms` | 6 dev titles | Search queries sent to each board. More terms = more coverage = slower. |
-| `countries` | all 5 | Any of `germany`, `austria`, `netherlands`, `switzerland`, `greece`. |
+| `countries` | all 6 | Any of `germany`, `austria`, `netherlands`, `switzerland`, `greece`, `malta`. |
 | `posted_within_days` | `14` | **Your date range.** Only postings this fresh. |
 | `results_per_term` | `40` | Cap per term per country on Indeed/Google. |
 | `linkedin_results_per_term` | `10` | Kept low on purpose — LinkedIn blocks aggressive scraping. |
-| `sources` | all 5 | Drop entries to disable, e.g. remove `"jobspy_linkedin"` if it keeps failing. |
+| `sources` | all 5 sources | Drop entries to disable, e.g. remove `"jobspy_linkedin"` if it keeps failing. |
 | `remote_policy` | `include` | `include` (on-site + remote), `only` (remote jobs only), `exclude`. |
 | `jooble_terms` | 2 broad queries | Separate, deliberately short list — Jooble keys allow only 500 requests ever. |
 
@@ -219,15 +219,16 @@ Flags override `preference.json` for that run only; they never rewrite the file.
 [developer.adzuna.com](https://developer.adzuna.com/) (instant, free, ~1000 calls/month).
 Put `ADZUNA_APP_ID` and `ADZUNA_APP_KEY` in `.env`.
 
-**Jooble** — covers all 5 countries, including **Greece**, which Adzuna lacks. A Jooble key
+**Jooble** — covers all 6 countries, including **Greece and Malta**, which Adzuna lacks. A Jooble key
 is **tied to the domain you registered it on**. Two ways to set it up:
 
 - *One key* registered at [jooble.org](https://jooble.org/api/about) → put it in `.env` as
   `JOOBLE_KEY`. It is used for every country, with the country name as the search location.
 - *Per-country keys* from [de](https://de.jooble.org/api/about) ·
   [at](https://at.jooble.org/api/about) · [nl](https://nl.jooble.org/api/about) ·
-  [ch](https://ch.jooble.org/api/about) · [gr](https://gr.jooble.org/api/about) → put them in
-  as `JOOBLE_KEY_DE`, `JOOBLE_KEY_AT`, … for slightly better local coverage.
+  [ch](https://ch.jooble.org/api/about) · [gr](https://gr.jooble.org/api/about) ·
+  [mt](https://mt.jooble.org/api/about) → put them in as `JOOBLE_KEY_DE`, `JOOBLE_KEY_AT`, …
+  for slightly better local coverage.
 
 The tool tries the regional domain first and automatically falls back to the main one, so
 either setup works. Each free key allows **500 requests total, ever** — this tool spends only
